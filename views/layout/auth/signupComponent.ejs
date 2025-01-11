@@ -1,0 +1,88 @@
+<div>
+  <div class="hero bg-base-200 max-h-screen min-h-[90vh] rounded-2xl">
+    <div class="hero-content flex-col px-20 gap-10 lg:flex-row-reverse">
+      <div class="text-center lg:text-left">
+        <h1 class="text-5xl font-bold">Create account!!</h1>
+        <p class="py-6">
+          Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
+          excepturi exercitationem quasi.
+        </p>
+      </div>
+      <div class="card bg-base-100 w-full max-w-lg shrink-0 shadow-2xl">
+        <form class="card-body" action="/sign-up" method="POST">
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Username</span>
+            </label>
+            <input
+              type="text"
+              name="username"
+              id="username"
+              placeholder="username"
+              class="input input-bordered"
+            />
+            <p
+              class="text-red-500 flex flex-col text-center py-1"
+              id="username-error"
+            ></p>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Email</span>
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="email"
+              class="input input-bordered"
+            />
+            <p
+              class="text-red-500 flex flex-col text-center py-1"
+              id="email-error"
+            ></p>
+          </div>
+          <div class="form-control">
+            <label class="label">
+              <span class="label-text">Password</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              placeholder="password"
+              class="input input-bordered"
+            />
+            <p
+              class="text-red-500 flex flex-col text-center py-1"
+              id="password-error"
+            ></p>
+            <label class="label">
+              <a href="#" class="label-text-alt link link-hover"
+                >Forgot password?</a
+              >
+            </label>
+          </div>
+          <div class="form-control mt-6">
+            <button type="submit" id="signup-btn" class="btn btn-primary">
+              signup
+            </button>
+            <p
+              class="text-red-500 py-1 flex flex-col text-center"
+              id="error-message"
+            >
+              <%= typeof message !== "undefined" && message ? ` ${message} ` :
+              "" %>
+            </p>
+          </div>
+          <div>
+            <p class="text-center">
+              Already have an account?
+              <a class="link font-bold" href="/login">Login</a>
+            </p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
