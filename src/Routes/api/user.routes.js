@@ -1,5 +1,9 @@
 const express = require("express");
-const { createAccount } = require("../../controller/auth.controller");
+const {
+  createAccount,
+  verifyOtp,
+} = require("../../controller/auth.controller");
+const { verifyJwt } = require("../../middleware/verifyJwt");
 
 const _ = express.Router();
 
@@ -17,6 +21,6 @@ _.route("/otp")
   .get((req, res) => {
     res.render("otp");
   })
-  .post();
+  .post(verifyJwt, verifyOtp);
 
 module.exports = _;

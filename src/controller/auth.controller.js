@@ -28,9 +28,7 @@ const createAccount = async (req, res) => {
     }
 
     const otp = generateOtp();
-    const otpExpires = Date.now() + 5 * 60 * 1000;
-
-    console.log("otp: ", otpExpires);
+    const otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
 
     // create user
     const [savedUser] = await pool.query(
@@ -38,7 +36,9 @@ const createAccount = async (req, res) => {
       [username, email, password, otp, otpExpires]
     );
 
-    const token = generateToken(savedUser.insertId);
+    console.log("savedUser: ", savedUser.insertId);
+
+    const token = generateToken({ id: savedUser.insertId });
 
     const mail = SendMail(
       OtpEmailTemplate(username, otp, otpExpires),
@@ -48,7 +48,7 @@ const createAccount = async (req, res) => {
 
     console.log("token ", token);
 
-    res.cookie("token", token, {
+    res.cookie("note_token", token, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
@@ -65,6 +65,41 @@ const createAccount = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const { otp } = req.body;
+    const user = req.user;
+
+    console.log("user: ", user);
+
+    if (otp.length < 6) {
+      return res.render("otp", { message: "Please enter a valid otp" });
+    }
+
+    const [userInfo] = await pool.query("SELECT * FROM users WHERE id = ?", [
+      user.id,
+    ]);
+
+    console.log("userInfo: ", userInfo);
+
+    if (userInfo.length < 1) {
+      return res.render("otp", { message: "User not found" });
+    }
+
+    if (Number(otp) !== userInfo[0].verification_code) {
+      return res.render("otp", { message: "Invalid OTP" });
+    }
+
+    if (Date.now() >= userInfo[0].otp_expires) {
+      console.log("OTP has expired", Date.now(), userInfo[0].otp_expires);
+      return res.render("otp", { message: "OTP has expired" });
+    }
+
+    const [updatedUser] = await pool.query(
+      "UPDATE users SET verification_code = NULL, otp_expires = NULL WHERE id = ?",
+      [user.id]
+    );
+
+    console.log("updatedUser: ", updatedUser);
+
+    res.redirect("/login");
   } catch (error) {
     console.log("verify otp error", error);
     res.render("otp", { message: "something went wrong" });
