@@ -23,6 +23,10 @@
                     />
                   </fieldset>
                   <button class="w-full mt-4 btn btn-neutral">submit</button>
+                  <p class="text-red-500">
+                    <%= typeof message !== "undefined" && message ? ` ${message}
+                    ` : "" %>
+                  </p>
                 </form>
               </div>
             </div>

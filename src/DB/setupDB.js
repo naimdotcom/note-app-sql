@@ -8,7 +8,7 @@ const createTables = async () => {
             email VARCHAR(255) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
             verification_code INT DEFAULT NULL,
-            otp_expires INT DEFAULT NULL,
+            otp_expires BIGINT DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );

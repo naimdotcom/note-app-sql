@@ -13,8 +13,10 @@ _.route("/login").get((req, res) => {
   res.render("login");
 });
 
-_.route("/otp").get((req, res) => {
-  res.render("otp");
-});
+_.route("/otp")
+  .get((req, res) => {
+    res.render("otp");
+  })
+  .post();
 
 module.exports = _;
