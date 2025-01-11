@@ -1,12 +1,14 @@
-const connection = require("./mysqlConnection");
+const pool = require("./mysqlConnection");
 
-const createTables = () => {
+const createTables = async () => {
   const userTable = `
         CREATE TABLE IF NOT EXISTS users (
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
+            username VARCHAR(255) NOT NULL,
             email VARCHAR(255) UNIQUE NOT NULL,
             password VARCHAR(255) NOT NULL,
+            verification_code INT DEFAULT NULL,
+            otp_expires INT DEFAULT NULL,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
@@ -16,6 +18,7 @@ const createTables = () => {
         CREATE TABLE IF NOT EXISTS notes (
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
             user_id INT NOT NULL,
+            editors_id INT, 
             title VARCHAR(255),
             content TEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -24,15 +27,23 @@ const createTables = () => {
         );
     `;
 
-  connection.query(userTable, (err) => {
-    if (err) console.error("Error creating users table:", err);
-    else console.log("Users table created successfully");
-  });
+  await pool
+    .query(userTable)
+    .then(() => {
+      console.log("Users table created successfully");
+    })
+    .catch((err) => {
+      console.log("Error creating users table: ", err);
+    });
 
-  connection.query(notesTable, (err) => {
-    if (err) console.error("Error creating notes table:", err);
-    else console.log("Notes table created successfully");
-  });
+  await pool
+    .query(notesTable)
+    .then(() => {
+      console.log("Notes table created successfully");
+    })
+    .catch((err) => {
+      console.log("Error creating notes table: ", err);
+    });
 };
 
 module.exports = createTables;

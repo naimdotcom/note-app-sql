@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="pink">
+  <%- include("layout/common/head.ejs"); %>
+  <body>
+    <div class="container mx-auto">
+      <div><%- include("layout/common/navbar.ejs"); %></div>
+
+      <div>
+        <div class="max-h-screen h-[90vh] hero bg-base-200">
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-14 hero-content">
+            <div class="w-full max-w-sm shadow-2xl card bg-base-100 shrink-0">
+              <div class="card-body">
+                <form action="/otp" method="POST">
+                  <fieldset class="flex flex-col gap-4 fieldset">
+                    <label class="fieldset-label">OTP</label>
+                    <input
+                      type="text"
+                      class="otp input input-ghost"
+                      name="otp"
+                      id=""
+                      placeholder="*123456"
+                      required
+                    />
+                  </fieldset>
+                  <button class="w-full mt-4 btn btn-neutral">submit</button>
+                </form>
+              </div>
+            </div>
+
+            <div class="text-center lg:text-left">
+              <h1 class="text-5xl font-bold">Verify your account</h1>
+              <p class="py-1">
+                “Be yourself; everyone else is already taken.” <br />
+                - Oscar Wilde
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

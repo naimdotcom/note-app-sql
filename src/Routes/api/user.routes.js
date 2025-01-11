@@ -13,4 +13,8 @@ _.route("/login").get((req, res) => {
   res.render("login");
 });
 
+_.route("/otp").get((req, res) => {
+  res.render("otp");
+});
+
 module.exports = _;
