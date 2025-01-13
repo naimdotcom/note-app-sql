@@ -2,6 +2,7 @@ const express = require("express");
 const {
   createAccount,
   verifyOtp,
+  login,
 } = require("../../controller/auth.controller");
 const { verifyJwt } = require("../../middleware/verifyJwt");
 
@@ -13,9 +14,11 @@ _.route("/sign-up")
   })
   .post(createAccount);
 
-_.route("/login").get((req, res) => {
-  res.render("login");
-});
+_.route("/login")
+  .get((req, res) => {
+    res.render("login");
+  })
+  .post(login);
 
 _.route("/otp")
   .get((req, res) => {
