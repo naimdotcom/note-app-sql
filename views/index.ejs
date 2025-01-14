@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/output.css" />
-    <title>Document</title>
-  </head>
+  <%- include("layout/common/head.ejs"); %>
   <body>
-    <%= random %>
-    <h1 class="text-3xl font-bold underline text-red-500">hello</h1>
+    <main class="container mx-auto">
+      <%- include("layout/common/navbar.ejs"); %>
+      <h1 class="text-3xl font-bold text-red-500 underline">hello</h1>
+    </main>
+
+    <!-- ===== script ======== -->
+    <script src="/js/index.js"></script>
   </body>
 </html>

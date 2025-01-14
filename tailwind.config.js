@@ -2,7 +2,7 @@ const { default: daisyui } = require("daisyui");
 // const daisyPlugin = require("daisyui/plugin");
 
 module.exports = {
-  content: ["./views/**/*.{html,js,ejs}"], // Include EJS files
+  content: ["./views/**/*.{html,js,ejs}", "./public/**/*.{html,js,ejs}"], // Include EJS files
   theme: {
     extend: {},
   },
@@ -37,6 +37,9 @@ module.exports = {
       "night",
       "coffee",
       "winter",
+      "dim",
+      "nord",
+      "sunset",
       {
         pink: {
           name: "pink", // Theme name

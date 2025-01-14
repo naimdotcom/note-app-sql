@@ -8,20 +8,17 @@ const verifyJwt = async (req, res, next) => {
       process.env.JWT_SECRET,
       (err, decoded) => {
         if (err) {
-          console.log(err);
+          // console.log(err);
           return res.render("login", { message: "Unauthorized" });
         }
-        console.log("decoded: ", decoded);
-
         return decoded;
       }
     );
-    console.log("decoded: ", decoded);
 
     req.user = decoded;
     next();
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     res.render("login", { message: "Unauthorized" });
   }
 };

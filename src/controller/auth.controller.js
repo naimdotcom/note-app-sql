@@ -8,7 +8,7 @@ const { generateToken } = require("../utils/tokens");
 const createAccount = async (req, res) => {
   try {
     const { username, email, password, confirm_password } = req.body;
-    console.log(req.body);
+
     const validateEmail = emailRegex.test(email);
     if (!email || !password || !validateEmail || password.length < 6) {
       return res.render("signup", {
@@ -20,7 +20,6 @@ const createAccount = async (req, res) => {
     const user = await pool.query("SELECT * FROM users WHERE email = ?", [
       email,
     ]);
-    console.log("user: ", user);
     if (user[0].length > 0) {
       return res.render("signup", {
         message: "Email already exist",
@@ -43,8 +42,6 @@ const createAccount = async (req, res) => {
       email,
       "OTP Verification"
     );
-
-    console.log("token ", token);
 
     res.cookie("note_token", token, {
       httpOnly: true,
@@ -69,8 +66,6 @@ const verifyOtp = async (req, res) => {
       return res.render("otp", { message: "User not found" });
     }
 
-    console.log("user: ", user);
-
     if (otp.length < 6) {
       return res.render("otp", { message: "Please enter a valid otp" });
     }
@@ -78,9 +73,6 @@ const verifyOtp = async (req, res) => {
     const [userInfo] = await pool.query("SELECT * FROM users WHERE id = ?", [
       user.id,
     ]);
-
-    console.log("userInfo: ", userInfo);
-
     if (userInfo.length < 1) {
       return res.render("otp", { message: "User not found" });
     }
@@ -90,7 +82,6 @@ const verifyOtp = async (req, res) => {
     }
 
     if (Date.now() >= userInfo[0].otp_expires) {
-      console.log("OTP has expired", Date.now(), userInfo[0].otp_expires);
       return res.render("otp", { message: "OTP has expired" });
     }
 
@@ -98,14 +89,12 @@ const verifyOtp = async (req, res) => {
       "UPDATE users SET verification_code = NULL, otp_expires = NULL, isverified = 1 WHERE id = ?",
       [user.id]
     );
-
-    console.log("updatedUser: ", updatedUser);
     const token = generateToken({ id: user.id });
     res.cookie("note_token", token, {
       httpOnly: true,
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
-    res.redirect("/login");
+    res.redirect("/");
   } catch (error) {
     console.log("verify otp error", error);
     res.render("otp", { message: "something went wrong" });
@@ -115,7 +104,6 @@ const verifyOtp = async (req, res) => {
 const login = async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
 
     if (!email || !password || !emailRegex.test(email) || password.length < 6) {
       return res.render("login", { message: "All fields are required" });
@@ -124,7 +112,6 @@ const login = async (req, res) => {
     const [user] = await pool.query("SELECT * FROM users WHERE email = ?", [
       email,
     ]);
-    console.log("user: ", user);
 
     if (user.length < 1) {
       return res.render("login", { message: "Invalid email or password" });
@@ -162,7 +149,6 @@ const login = async (req, res) => {
     }
 
     const token = generateToken(user[0].id);
-    console.log("token: ", token);
 
     res.cookie("note_token", token, {
       httpOnly: true,
@@ -176,4 +162,49 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { createAccount, verifyOtp, login };
+const forgetPassword = async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email || !emailRegex.test(email)) {
+      return res.render("forgetPassword", {
+        message: "All fields are required",
+      });
+    }
+
+    const [user] = await pool.query("SELECT * FROM users WHERE email = ?", [
+      email,
+    ]);
+
+    if (!user || user.length < 1) {
+      return res.render("reset_password", { message: "User not found" });
+    }
+
+    const otp = generateOtp();
+    const otpExpires = Date.now() + 10 * 60 * 1000; // 10 minutes
+
+    const token = generateToken({ id: user[0].id });
+
+    await pool.query(
+      "UPDATE users SET verification_code = ?, otp_expires = ? WHERE id = ?",
+      [otp, otpExpires, user[0].id]
+    );
+    SendMail(
+      OtpEmailTemplate(user[0].username, otp, otpExpires), // 10 minutes
+      email,
+      "OTP Verification"
+    );
+
+    res.cookie("note_token", token, {
+      httpOnly: true,
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    });
+
+    res.render("otp", { message: "Check your email" });
+  } catch (error) {
+    console.log("forget password error", error);
+    res.render("forgetPassword", { message: "something went wrong" });
+  }
+};
+
+module.exports = { createAccount, verifyOtp, login, forgetPassword };

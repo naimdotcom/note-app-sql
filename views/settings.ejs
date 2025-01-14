@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include("layout/common/head.ejs"); %>
+  <body>
+    <main class="container mx-auto">
+      <div><%- include("layout/common/navbar.ejs"); %></div>
+
+      <!-- theme changer -->
+      <div>
+        <div id="themes">
+          <div class="space-y-6">
+            <div class="flex flex-col gap-1">
+              <h2 class="text-lg font-semibold">Theme</h2>
+              <p class="text-sm text-base-content/70">
+                Choose a theme for your chat interface
+              </p>
+            </div>
+
+            <div class="grid grid-cols-4 gap-2 sm:grid-cols-6 md:grid-cols-8">
+              <% THEMES.forEach(function(t) { %>
+              <button
+                class="group flex flex-col items-center gap-1.5 p-2 rounded-lg transition-colors <%= theme === t ? 'bg-base-200' : 'hover:bg-base-200/50' %>"
+                onclick="(toggleTheme('<%= t %>'))"
+              >
+                <div
+                  class="relative w-full h-8 overflow-hidden rounded-md"
+                  data-theme="<%= t %>"
+                >
+                  <div class="absolute inset-0 grid grid-cols-4 gap-px p-1">
+                    <div class="rounded bg-primary"></div>
+                    <div class="rounded bg-secondary"></div>
+                    <div class="rounded bg-accent"></div>
+                    <div class="rounded bg-neutral"></div>
+                  </div>
+                </div>
+                <span
+                  class="text-[11px] font-medium truncate w-full text-center"
+                >
+                  <%= t.charAt(0).toUpperCase() + t.slice(1) %>
+                </span>
+              </button>
+              <% }); %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ====== script ======== -->
+    <script src="/js/index.js"></script>
+  </body>
+</html>
