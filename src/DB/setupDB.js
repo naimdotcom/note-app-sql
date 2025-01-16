@@ -18,14 +18,25 @@ const createTables = async () => {
   const notesTable = `
         CREATE TABLE IF NOT EXISTS notes (
             id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            user_id INT NOT NULL,
-            editors_id INT, 
+            user_id INT NOT NULL, 
             title VARCHAR(255),
-            content TEXT,
+            content LONGTEXT,
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
             FOREIGN KEY (user_id) REFERENCES users(id)
         );
+    `;
+
+  const editorTable = `
+      CREATE TABLE IF NOT EXISTS editors (
+          id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+          note_id INT NOT NULL,
+          can_edit BOOLEAN default 1,
+          can_view BOOLEAN default 1,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          FOREIGN KEY (note_id) REFERENCES notes(id)
+      )
     `;
 
   await pool
@@ -45,6 +56,11 @@ const createTables = async () => {
     .catch((err) => {
       console.log("Error creating notes table: ", err);
     });
+
+  await pool
+    .query(editorTable)
+    .then(() => console.log("editors table created"))
+    .catch((error) => console.log("error creating editor table: ", error));
 };
 
 module.exports = createTables;
