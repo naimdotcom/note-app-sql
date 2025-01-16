@@ -4,6 +4,7 @@ const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const userRouter = require("./api/user.routes");
+const noteRouter = require("./note.routes");
 
 app.use(
   cors({
@@ -20,5 +21,6 @@ app.set("view engine", "ejs");
 app.set("views", "./views");
 
 app.use("/", userRouter);
+app.use("/note", noteRouter);
 
 module.exports = app;
