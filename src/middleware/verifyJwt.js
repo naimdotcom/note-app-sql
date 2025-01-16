@@ -8,7 +8,6 @@ const verifyJwt = async (req, res, next) => {
       process.env.JWT_SECRET,
       (err, decoded) => {
         if (err) {
-          // console.log(err);
           return res.render("login", { message: "Unauthorized" });
         }
         return decoded;

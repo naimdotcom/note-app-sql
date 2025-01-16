@@ -4,6 +4,8 @@ const { CreateNote } = require("../controller/note.controller");
 
 const _ = express.Router();
 
-_.route("/").post(CreateNote);
+_.route("/")
+  .get((req, res) => res.render("note"))
+  .post(CreateNote);
 
 module.exports = _;
