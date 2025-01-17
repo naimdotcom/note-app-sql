@@ -35,8 +35,14 @@ document.getElementById("noteForm").onsubmit = async function (e) {
   const title = document.getElementById("title").value;
   const content = quill.root.innerHTML;
 
+  if (!title || !content) {
+    console.log("not");
+    e.preventDefault();
+    return;
+  }
+
   // Send content to the server
-  const response = await fetch("/note", {
+  const response = await fetch("http://localhost:4040/note", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

@@ -6,6 +6,6 @@ const _ = express.Router();
 
 _.route("/")
   .get((req, res) => res.render("note"))
-  .post(CreateNote);
+  .post(verifyJwt, CreateNote);
 
 module.exports = _;

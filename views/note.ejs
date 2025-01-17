@@ -80,18 +80,19 @@
     <main class="container mx-auto">
       <div><%- include("layout/common/navbar.ejs") %></div>
 
-      <form class="flex flex-col w-full">
+      <form id="noteForm" class="flex flex-col w-full">
         <div class="w-full space-y-5">
           <div class="flex items-center w-full input input-bordered">
             <p>Title:&nbsp;</p>
             <input
+              id="title"
               type="text"
               placeholder="Type here the title"
               class="w-full"
             />
           </div>
-          <div>
-            <div id="toolbar-container">
+          <div class="space-y-6 text-primary">
+            <div id="toolbar-container" class="rounded-lg">
               <span class="ql-formats">
                 <select class="ql-font"></select>
                 <select class="ql-size"></select>
@@ -135,15 +136,16 @@
                 <button class="ql-clean"></button>
               </span>
             </div>
-            <div id="editor"></div>
+            <div id="editor" class="border-t-4 border-black rounded"></div>
           </div>
-          <div id="playground"></div>
         </div>
-        <button class="self-end px-10 btn btn-active">save</button>
+        <button type="submit" class="self-end px-10 btn btn-active">
+          save
+        </button>
       </form>
     </main>
 
     <script src="/js/index.js"></script>
-    <script defer src="/js/notes/text.js"></script>
+    <script src="/js/notes/text.js"></script>
   </body>
 </html>
